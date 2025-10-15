@@ -231,13 +231,90 @@ body {
 /* Input Container */
 .chatbot-input {
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
   padding: 1rem;
   background: white;
   border-top: 1px solid #e1e8ed;
 }
 
-.chatbot-input input {
+.attachment-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.attachment-input {
+  display: none;
+}
+
+.attachment-btn {
+  border: none;
+  background: rgba(255, 107, 53, 0.12);
+  color: #FF6B35;
+  padding: 0.625rem 0.95rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.attachment-btn:hover:not(:disabled) {
+  background: rgba(255, 107, 53, 0.2);
+  transform: translateY(-1px);
+}
+
+.attachment-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.attachment-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f4f5f7;
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.attachment-chip button {
+  border: none;
+  background: transparent;
+  color: #FF6B35;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attachment-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.attachment-error {
+  margin: 0 0 0.25rem 0.25rem;
+  color: #d9534f;
+  font-size: 0.85rem;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.input-row input {
   flex: 1;
   padding: 0.875rem 1rem;
   border: 2px solid #e1e8ed;
@@ -247,16 +324,16 @@ body {
   transition: border-color 0.2s ease;
 }
 
-.chatbot-input input:focus {
+.input-row input:focus {
   border-color: #FF6B35;
 }
 
-.chatbot-input input:disabled {
+.input-row input:disabled {
   background: #f8f9fa;
   cursor: not-allowed;
 }
 
-.chatbot-input button {
+.input-row button {
   width: 48px;
   height: 48px;
   border-radius: 12px;
@@ -271,12 +348,12 @@ body {
   justify-content: center;
 }
 
-.chatbot-input button:hover:not(:disabled) {
+.input-row button:hover:not(:disabled) {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
-.chatbot-input button:disabled {
+.input-row button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
