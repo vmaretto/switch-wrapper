@@ -11,13 +11,15 @@ export default function App() {
       <SwitchFrame />
       
       {/* Chat Toggle Button */}
-      <button
-        className={`chat-toggle-btn ${isChatOpen ? 'open' : ''}`}
-        onClick={() => setIsChatOpen(!isChatOpen)}
-        aria-label="Toggle chat"
-      >
-        {isChatOpen ? '✕' : '💬'}
-      </button>
+      {!isChatOpen && (
+        <button
+          className="chat-toggle-btn"
+          onClick={() => setIsChatOpen(true)}
+          aria-label="Apri la chat"
+        >
+          💬
+        </button>
+      )}
 
       {/* Chat Sidebar */}
       <div className={`chat-sidebar ${isChatOpen ? 'open' : ''}`}>
