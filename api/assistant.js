@@ -20,56 +20,42 @@ app.use((req, res, next) => {
 
 const PORT = process.env.PORT || 3001;
 
-const SWITCH_RECIPES_BASE_URL =
-  'https://api-gateway-switchproject.posti.world/api-refactoring/api/v1/bo/SWITCH_FOOD_EX_RECIPES';
-
-const buildRecipeUrl = (rawRecipeId) => {
-  if (!rawRecipeId) {
-    return null;
-  }
-
-  const trimmedId = String(rawRecipeId).trim().replace(/^\/+|\/+$/g, '');
-
-  if (!trimmedId) {
-    return null;
-  }
-
-  if (trimmedId.startsWith('http')) {
-    return trimmedId;
-  }
-
-  const hasNestedPath = trimmedId.includes('/');
-  const path = hasNestedPath ? trimmedId : `PUBLIC_RECIPES/${trimmedId}`;
-
-  return `${SWITCH_RECIPES_BASE_URL}/${path}`;
-};
+const SWITCH_RECIPES_BASE_URL = 'https://api.switchfoodexplorer.it/recipes';
 
 app.post('/assistant', async (req, res) => {
-  const { question, recipeId } = req.body || {};
+  const { question, recipeId, recipeJson } = req.body || {};
 
-  if (!question || !recipeId) {
-    return res.status(400).json({ error: 'Missing question or recipeId' });
+  if (!question || (!recipeId && !recipeJson)) {
+    return res.status(400).json({ error: 'Missing question or recipe data' });
   }
 
-  const recipeUrl = buildRecipeUrl(recipeId);
-
-  if (!recipeUrl) {
-    return res.status(400).json({ error: 'Invalid recipeId' });
-  }
+  let recipe;
 
   try {
-    const recipeResponse = await fetch(recipeUrl, {
-      headers: {
-        Accept: 'application/json'
+    if (recipeJson) {
+      recipe = recipeJson;
+    } else {
+      const trimmedId = String(recipeId).trim().replace(/^\/+|\/+$/g, '');
+
+      if (!trimmedId) {
+        return res.status(400).json({ error: 'Invalid recipeId' });
       }
-    });
 
-    if (!recipeResponse.ok) {
-      const statusText = recipeResponse.statusText || 'Unable to retrieve recipe data';
-      return res.status(502).json({ error: statusText });
+      const recipeUrl = `${SWITCH_RECIPES_BASE_URL}/${encodeURIComponent(trimmedId)}`;
+
+      const recipeResponse = await fetch(recipeUrl, {
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+
+      if (!recipeResponse.ok) {
+        const statusText = recipeResponse.statusText || 'Unable to retrieve recipe data';
+        return res.status(502).json({ error: statusText });
+      }
+
+      recipe = await recipeResponse.json();
     }
-
-    const recipe = await recipeResponse.json();
 
     const prompt = `Sei Switch Assistant, un assistente culinario sostenibile.
 Ti fornisco i dettagli della ricetta seguente:
