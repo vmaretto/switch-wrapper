@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SwitchFrame from './components/SwitchFrame';
 import ChatBot from './components/ChatBot';
-import FooterSwitch from './components/FooterSwitch';
 import './styles.css';
 
 export default function App() {
@@ -12,8 +11,6 @@ export default function App() {
       <main className="app-content" role="main">
         <SwitchFrame />
       </main>
-
-      <FooterSwitch />
 
       {/* Chat Toggle Button */}
       {!isChatOpen && (

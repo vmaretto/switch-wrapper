@@ -6,39 +6,32 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  overflow-x: hidden;
-  background-color: #ffffff;
+  overflow: hidden;
 }
 
 /* App Container */
 .app-container {
-  min-height: 100vh;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   position: relative;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
 }
 
 .app-content {
-  flex: 1 1 auto;
-  display: flex;
-  min-height: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* Switch Frame */
 .switch-frame {
   width: 100%;
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
+  height: 100%;
 }
 
 .switch-iframe {
   width: 100%;
-  flex: 1 1 auto;
+  height: 100%;
   border: none;
-  display: block;
-  min-height: 0;
 }
 
 /* Chat Toggle Button */
@@ -408,165 +401,12 @@ body {
   .chatbot-header {
     padding: 1rem;
   }
-
+  
   .chatbot-messages {
     padding: 1rem;
   }
-
+  
   .message-content {
     max-width: 85%;
-  }
-}
-
-/* Footer */
-.footer-switch {
-  background-color: #1b8fa7;
-  color: #ffffff;
-  padding: 2.5rem 1rem;
-  text-align: center;
-}
-
-.footer-switch a {
-  color: inherit;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-.footer-switch a:hover {
-  opacity: 0.85;
-}
-
-.footer-inner {
-  max-width: 72rem;
-  margin: 0 auto 2.5rem auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.footer-brand {
-  display: flex;
-  justify-content: center;
-}
-
-.footer-logo {
-  height: 5rem;
-  max-width: 100%;
-  object-fit: contain;
-}
-
-.footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.footer-social {
-  margin-bottom: 2.5rem;
-}
-
-.footer-social h2 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.footer-social-links {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-}
-
-.footer-social-links img {
-  width: 2.5rem;
-  height: 2.5rem;
-  object-fit: contain;
-}
-
-.footer-legal {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
-  font-size: 0.875rem;
-}
-
-.footer-legal a {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-
-.footer-info {
-  max-width: 64rem;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  align-items: center;
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-
-.footer-eu-logo {
-  height: 3.5rem;
-  max-width: 100%;
-  object-fit: contain;
-}
-
-.footer-project-id {
-  margin: 0;
-  font-size: 0.75rem;
-}
-
-.footer-disclaimer {
-  margin: 0;
-  font-size: 0.6875rem;
-  max-width: 24rem;
-  opacity: 0.8;
-}
-
-@media (min-width: 768px) {
-  .footer-inner {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
-  }
-
-  .footer-nav {
-    justify-content: flex-end;
-  }
-
-  .footer-social {
-    text-align: center;
-  }
-
-  .footer-legal {
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 2.5rem;
-  }
-
-  .footer-info {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
-  }
-
-  .footer-project-id {
-    font-size: 0.875rem;
-  }
-
-  .footer-disclaimer {
-    text-align: right;
   }
 }
