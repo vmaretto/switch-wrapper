@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import HeaderSwitch from './HeaderSwitch';
+import FooterSwitch from './FooterSwitch';
 
 function DemographicsForm({ onComplete }) {
   const [formData, setFormData] = useState({
@@ -9,6 +11,8 @@ function DemographicsForm({ onComplete }) {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const handleAgeChange = (e) => {
     const value = e.target.value;
@@ -35,7 +39,8 @@ function DemographicsForm({ onComplete }) {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.age || formData.age < 1) newErrors.age = true;
+    const ageNum = Number(formData.age);
+    if (!formData.age || ageNum < 1 || ageNum > 120) newErrors.age = true;
     if (!formData.gender) newErrors.gender = true;
     if (!formData.profession) newErrors.profession = true;
     if (!formData.fruitsVegetables) newErrors.fruitsVegetables = true;
@@ -44,19 +49,67 @@ function DemographicsForm({ onComplete }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      // Salva i dati in localStorage
+  const handleSubmit = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    setSubmitError(null);
+
+    // Genera un session ID se non esiste
+    let sessionId = localStorage.getItem('sessionId');
+    if (!sessionId) {
+      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('sessionId', sessionId);
+    }
+
+    try {
+      // Salva i dati nel database tramite API
+      const response = await fetch('/api/demographics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          sessionId
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Salva anche in localStorage come backup
+        localStorage.setItem('userDemographics', JSON.stringify(formData));
+        localStorage.setItem('demographicsCompleted', 'true');
+        onComplete(formData);
+      } else {
+        throw new Error(data.error || 'Failed to save demographics');
+      }
+    } catch (error) {
+      console.error('Error saving demographics:', error);
+      setSubmitError('Failed to save data. Please try again.');
+
+      // Fallback: salva solo in localStorage
       localStorage.setItem('userDemographics', JSON.stringify(formData));
       localStorage.setItem('demographicsCompleted', 'true');
-      onComplete(formData);
+
+      // Continua comunque dopo 2 secondi
+      setTimeout(() => {
+        onComplete(formData);
+      }, 2000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="demographics-container">
-      <div className="demographics-card">
-        <h1 className="demographics-title">Tell us about you</h1>
+      <HeaderSwitch />
+      <div className="demographics-content">
+        <div className="demographics-card">
+          <h1 className="demographics-title">Tell us about you</h1>
 
         {/* Age Input */}
         <div className="demographics-field">
@@ -162,11 +215,24 @@ function DemographicsForm({ onComplete }) {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <button className="demographics-submit-button" onClick={handleSubmit}>
-          Next
-        </button>
+          {/* Error Message */}
+          {submitError && (
+            <div className="demographics-error-message">
+              {submitError}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            className="demographics-submit-button"
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Saving...' : 'Next'}
+          </button>
+        </div>
       </div>
+      <FooterSwitch />
     </div>
   );
 }
