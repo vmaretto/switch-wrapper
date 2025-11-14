@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SwitchFrame from './components/SwitchFrame';
 import ChatBot from './components/ChatBot';
+import DemographicsForm from './components/DemographicsForm';
 import './styles.css';
 
 export default function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showDemographics, setShowDemographics] = useState(false);
 
+  // Check if user has completed demographics on mount
+  useEffect(() => {
+    const completed = localStorage.getItem('demographicsCompleted');
+
+    if (completed === 'true') {
+      setShowDemographics(false);
+    } else {
+      setShowDemographics(true);
+    }
+  }, []);
+
+  const handleDemographicsComplete = () => {
+    setShowDemographics(false);
+  };
+
+  // Show demographics form if not completed
+  if (showDemographics) {
+    return <DemographicsForm onComplete={handleDemographicsComplete} />;
+  }
+
+  // Show main app once demographics are completed
   return (
     <div className="app-container">
       <main className="app-content" role="main">
@@ -30,7 +53,7 @@ export default function App() {
 
       {/* Overlay when chat is open (mobile) */}
       {isChatOpen && (
-        <div 
+        <div
           className="chat-overlay"
           onClick={() => setIsChatOpen(false)}
         />
